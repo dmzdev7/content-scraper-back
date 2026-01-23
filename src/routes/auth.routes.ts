@@ -12,6 +12,7 @@ import {
   verifyEmailSchema,
 } from '../shared/validators/auth.validator.js'
 import { authenticate } from '../middlewares/auth.middleware.js'
+import { authLimiter, emailLimiter, passwordResetLimiter, registerLimiter } from '../config/rate-limit.config.js'
 
 const router: Router = Router()
 
@@ -88,6 +89,7 @@ const router: Router = Router()
  */
 router.post(
   '/register',
+  registerLimiter,
   validate(registerSchema),
   AuthController.registerController,
 )
@@ -155,6 +157,7 @@ router.post(
  */
 router.post(
   '/login',
+  authLimiter,
   validate(loginSchema),
   AuthController.loginController,
 )
@@ -303,6 +306,7 @@ router.post(
  */
 router.post(
   '/resend-verification',
+  emailLimiter,
   validate(resendVerificationEmailSchema),
   AuthController.resendVerificationEmailController,
 )
@@ -348,6 +352,7 @@ router.post(
  */
 router.post(
   '/forgot-password',
+  passwordResetLimiter,
   validate(forgotPasswordSchema),
   AuthController.forgotPasswordController,
 )
