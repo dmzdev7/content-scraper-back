@@ -6,6 +6,7 @@ import { config } from './config/index.js'
 import { httpLogger } from './middlewares/logger.middleware.js'
 import swaggerUi from 'swagger-ui-express'
 import swaggerSpec from './config/swagger.config.js'
+import { generalLimiter } from './config/rate-limit.config.js'
 
 // Crear la aplicación Express
 const app: Application = express()
@@ -15,6 +16,10 @@ app.use(express.json())
 
 // Middleware de logging HTTP
 app.use(httpLogger)
+
+// ========== RATE LIMITING GENERAL ==========
+// Aplicar a todas las rutas (excepto /api-docs)
+app.use('/api', generalLimiter)
 
 // ========== SWAGGER DOCUMENTATION ==========
 app.use(
